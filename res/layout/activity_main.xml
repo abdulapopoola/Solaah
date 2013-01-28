@@ -1,6 +1,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/four"
+    android:layout_marginTop="@dimen/four"
     android:orientation="vertical" >
 
     <LinearLayout
@@ -27,28 +29,41 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Button" />
-
     </LinearLayout>
-    
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/four"
         android:orientation="vertical" >
 
-        <Button
-            android:id="@+id/button3"
-            android:layout_width="217dp"
-            android:layout_height="wrap_content"
-            android:text="Button" />
+        <TextView
+            android:id="@+id/TextView10"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/four"
+            android:background="@drawable/rounded_corners_white"
+            android:padding="@dimen/four"
+            android:text="July 28, 2012"
+            android:textSize="@dimen/twenty"
+            android:typeface="serif" />
 
-        <Button
-            android:id="@+id/button2"
-            android:layout_width="244dp"
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Button" />
-
+            android:layout_marginBottom="@dimen/four"
+            android:background="@drawable/rounded_corners_white"
+            android:padding="@dimen/four"
+            android:shadowColor="#88FFFFFF"
+            android:shadowDx="0"
+            android:shadowDy="1"
+            android:shadowRadius="0.1"
+            android:text="2 hours until Zuhr"
+            android:textSize="@dimen/twenty"
+            android:typeface="serif" />
     </LinearLayout>
-    
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -172,9 +187,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="TextView" />
-
         </LinearLayout>
-
     </LinearLayout>
+
+    <ListView
+        android:id="@+id/listView1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+    </ListView>
 
 </LinearLayout>
