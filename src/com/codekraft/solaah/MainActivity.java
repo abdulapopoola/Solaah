@@ -1,8 +1,6 @@
 package com.codekraft.solaah;
 
-import java.io.IOException;
-
-import com.codekraft.data.DataBaseHelper;
+import com.codekraft.data.SQLDbAdapter;
 
 import android.os.Bundle;
 import android.app.Activity;
@@ -16,15 +14,10 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		DataBaseHelper myDbHelper = new DataBaseHelper(this);
-		myDbHelper = new DataBaseHelper(this);
+		SQLDbAdapter myDbHelper = new SQLDbAdapter(this);
+		myDbHelper = new SQLDbAdapter(this);
 
-		try {
-			myDbHelper.createDataBase();
-		} catch (IOException ioe) {
-			throw new Error("Unable to create database");
-		}
-
+		//Change to getReadableDatabase
 		try {
 			myDbHelper.openDataBase();
 		} catch (SQLException sqle) {
