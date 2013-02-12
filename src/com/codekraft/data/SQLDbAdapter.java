@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
@@ -21,6 +22,7 @@ public class SQLDbAdapter extends SQLiteOpenHelper {
 
 	private static final int DATABASE_VERSION = 1;
 	private static final String TAG = "sqldbadapter";
+	private static final String PRAYER_TIMES_TABLE = "prayertimes";
 
 	/**
 	 * Constructor Takes and keeps a reference of the passed context in order to
@@ -130,7 +132,8 @@ public class SQLDbAdapter extends SQLiteOpenHelper {
 	@Override
 	public void onCreate(SQLiteDatabase arg0) {
 		try {
-			createDataBase();
+			Log.e("Creating database", TAG);
+			createDataBase();			
 		} catch (IOException e) {
 			Log.e("Error creating database", e.toString());
 		}
@@ -144,6 +147,25 @@ public class SQLDbAdapter extends SQLiteOpenHelper {
 		} catch (IOException e) {
 			Log.e("Error upgrading database", e.toString());
 		}
+	}
+
+	/**
+	 * Gets the times for a particular date
+	 * 
+	 * @param date
+	 *            The date to retrieve times for; format is 2-Feb
+	 * */
+	public Cursor getTimingsForDate(String date) {
+		String sql = "SELECT * FROM " + PRAYER_TIMES_TABLE + " WHERE date == " + date; 
+		
+		SQLiteDatabase d = getReadableDatabase();
+		Cursor c = d.rawQuery(sql, null);
+
+		if (c.getCount() > 0) {
+			return c;
+		}
+		
+		return null;
 	}
 
 }
