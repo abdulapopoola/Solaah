@@ -1,32 +1,27 @@
 package com.codekraft.solaah;
 
-import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-import com.codekraft.data.SQLDbAdapter;
-
-import android.os.Bundle;
 import android.app.Activity;
+import android.database.Cursor;
+import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 
+import com.codekraft.data.SQLDbAdapter;
+
 public class MainActivity extends Activity {
+	private static final String TAG = "salaahApp";
+	private SQLDbAdapter myDbHelper;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		SQLDbAdapter myDbHelper = new SQLDbAdapter(this);
+		myDbHelper = new SQLDbAdapter(this);
 		myDbHelper.getReadableDatabase();
-		// myDbHelper.openDataBase();
-
-		// Change to getReadableDatabase
-		// try {
-		// myDbHelper.openDataBase();
-		// } catch (SQLException sqle) {
-		// throw sqle;
-		// }
 	}
 
 	@Override
@@ -39,11 +34,21 @@ public class MainActivity extends Activity {
 	/**
 	 * Gets today's date in this format: 2-Feb
 	 * */
-	public String getDateToday() {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
-		String currentDateandTime = sdf.format(new Date());
+	private String getTodayDate() {
+		Calendar c = Calendar.getInstance();
+		
+		SimpleDateFormat df = new SimpleDateFormat("d-MMM");
+		String formattedDate = df.format(c.getTime());
+		
+		return formattedDate;
+	}
+	
+	private String getPrayerTimesForDate(String date)
+	{
+		Cursor cursor = myDbHelper.getTimingsForDate(date);
 		
 		return "";
 	}
+	
 
 }

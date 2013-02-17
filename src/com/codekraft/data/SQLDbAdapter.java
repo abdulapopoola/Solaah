@@ -132,7 +132,6 @@ public class SQLDbAdapter extends SQLiteOpenHelper {
 	@Override
 	public void onCreate(SQLiteDatabase arg0) {
 		try {
-			Log.e("Creating database", TAG);
 			createDataBase();			
 		} catch (IOException e) {
 			Log.e("Error creating database", e.toString());
