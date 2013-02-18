@@ -21,7 +21,10 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 
 		myDbHelper = new SQLDbAdapter(this);
-		myDbHelper.getReadableDatabase();
+		//myDbHelper.getReadableDatabase();
+
+		String today = getTodayDate();
+		getPrayerTimesForDate(today);
 	}
 
 	@Override
@@ -36,19 +39,24 @@ public class MainActivity extends Activity {
 	 * */
 	private String getTodayDate() {
 		Calendar c = Calendar.getInstance();
-		
+
 		SimpleDateFormat df = new SimpleDateFormat("d-MMM");
 		String formattedDate = df.format(c.getTime());
-		
+
 		return formattedDate;
 	}
-	
+
 	private String getPrayerTimesForDate(String date)
 	{
 		Cursor cursor = myDbHelper.getTimingsForDate(date);
+		int colCount = cursor.getColumnCount();
+		
+		for (int i=0; i < colCount; i++) {
+			  String var1 = cursor.getString(i);
+			  Log.i(var1, "Hello");
+		}
 		
 		return "";
 	}
-	
 
 }

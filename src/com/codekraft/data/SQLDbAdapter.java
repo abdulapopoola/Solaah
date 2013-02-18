@@ -155,10 +155,10 @@ public class SQLDbAdapter extends SQLiteOpenHelper {
 	 *            The date to retrieve times for; format is 2-Feb
 	 * */
 	public Cursor getTimingsForDate(String date) {
-		String sql = "SELECT * FROM " + PRAYER_TIMES_TABLE + " WHERE date == " + date; 
+		String sql = "SELECT * FROM " + PRAYER_TIMES_TABLE + " WHERE Date = ?"; 
 		
 		SQLiteDatabase d = getReadableDatabase();
-		Cursor c = d.rawQuery(sql, null);
+		Cursor c = d.rawQuery(sql, new String[] {date});
 
 		if (c.getCount() > 0) {
 			return c;
