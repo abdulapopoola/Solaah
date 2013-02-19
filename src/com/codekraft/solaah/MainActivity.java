@@ -1,5 +1,6 @@
 package com.codekraft.solaah;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
@@ -20,7 +21,12 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		myDbHelper = new SQLDbAdapter(this);
+		try {
+			myDbHelper = new SQLDbAdapter(this);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			Log.e("DB FAILED", TAG);
+		}
 		//myDbHelper.getReadableDatabase();
 
 		String today = getTodayDate();
@@ -50,11 +56,14 @@ public class MainActivity extends Activity {
 	{
 		Cursor cursor = myDbHelper.getTimingsForDate(date);
 		int colCount = cursor.getColumnCount();
-		
-		for (int i=0; i < colCount; i++) {
-			  String var1 = cursor.getString(i);
-			  Log.i(var1, "Hello");
-		}
+		Log.e(""+colCount, TAG);
+		cursor.moveToFirst();
+		String var1 = cursor.getString(3);
+		Log.e(var1, TAG);
+//		for (int i=0; i < colCount; i++) {
+//			  String var1 = cursor.getString(i);
+//			  Log.i(var1, "Hello");
+//		}
 		
 		return "";
 	}

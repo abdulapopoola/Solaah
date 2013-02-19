@@ -1,5 +1,6 @@
 package com.codekraft.data;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,9 +31,18 @@ public class SQLDbAdapter extends SQLiteOpenHelper {
 	 * 
 	 * @param context
 	 */
-	public SQLDbAdapter(Context context) {
+	public SQLDbAdapter(Context context) throws IOException{
 		super(context, DB_NAME, null, DATABASE_VERSION);
 		this.myContext = context;
+
+		boolean dbexist = checkDataBase();
+		if (dbexist) {
+			// System.out.println("Database exists");
+			openDataBase();
+		} else {
+			createDataBase();
+			Log.i("Database created", TAG);
+		}
 	}
 
 	/**
@@ -65,22 +75,17 @@ public class SQLDbAdapter extends SQLiteOpenHelper {
 	 * @return true if it exists, false if it doesn't
 	 */
 	private boolean checkDataBase() {
-
-		SQLiteDatabase checkDB = null;
+		boolean checkdb = false;
 
 		try {
 			String myPath = DB_PATH + DB_NAME;
-			checkDB = SQLiteDatabase.openDatabase(myPath, null,
-					SQLiteDatabase.OPEN_READONLY);
+			File dbfile = new File(myPath);
+			checkdb = dbfile.exists();
 		} catch (SQLiteException e) {
-			// database does't exist yet.
+			System.out.println("Database doesn't exist");
 		}
 
-		if (checkDB != null) {
-			checkDB.close();
-		}
-
-		return checkDB != null ? true : false;
+		return checkdb;
 	}
 
 	/**
@@ -97,7 +102,8 @@ public class SQLDbAdapter extends SQLiteOpenHelper {
 		String outFileName = DB_PATH + DB_NAME;
 
 		// Open the empty db as the output stream
-		OutputStream myOutput = new FileOutputStream(outFileName);
+		OutputStream myOutput = new FileOutputStream(
+				"/data/data/com.codekraft.solaah/databases/prayertimes.db");
 
 		// transfer bytes from the inputfile to the outputfile
 		byte[] buffer = new byte[1024];
@@ -117,7 +123,7 @@ public class SQLDbAdapter extends SQLiteOpenHelper {
 		// Open the database
 		String myPath = DB_PATH + DB_NAME;
 		myDataBase = SQLiteDatabase.openDatabase(myPath, null,
-				SQLiteDatabase.OPEN_READONLY);
+				SQLiteDatabase.OPEN_READWRITE);
 
 	}
 
@@ -132,7 +138,7 @@ public class SQLDbAdapter extends SQLiteOpenHelper {
 	@Override
 	public void onCreate(SQLiteDatabase arg0) {
 		try {
-			createDataBase();			
+			createDataBase();
 		} catch (IOException e) {
 			Log.e("Error creating database", e.toString());
 		}
@@ -155,15 +161,15 @@ public class SQLDbAdapter extends SQLiteOpenHelper {
 	 *            The date to retrieve times for; format is 2-Feb
 	 * */
 	public Cursor getTimingsForDate(String date) {
-		String sql = "SELECT * FROM " + PRAYER_TIMES_TABLE + " WHERE Date = ?"; 
-		
-		SQLiteDatabase d = getReadableDatabase();
-		Cursor c = d.rawQuery(sql, new String[] {date});
+		String sql = "SELECT * FROM " + PRAYER_TIMES_TABLE + " WHERE Date = ?";
+
+		//SQLiteDatabase d = getReadableDatabase();
+		Cursor c = myDataBase.rawQuery(sql, new String[] { date });
 
 		if (c.getCount() > 0) {
-			return c;
+			return c;	//Moves the cursor; find a way around this
 		}
-		
+
 		return null;
 	}
 
