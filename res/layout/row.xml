@@ -41,5 +41,5 @@
     		android:text="@string/time"/>
         
         
-    </LinearLayout>"
+    </LinearLayout>
 </RelativeLayout>

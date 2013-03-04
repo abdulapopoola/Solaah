@@ -3,7 +3,7 @@
     <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
     <string name="settings_top_container">settings_top_container</string>
-    <string name="settings_bottom_container">settings_bottom_container</string><string name="testDate">Monday 25 February 2013</string>
+    <string name="testDate">Monday 25 February 2013</string>
     <string name="title">Prayer Times</string>
     <string name="hourCount">2 hours until Zuhr</string>
     <string name="salat">Salah</string>
