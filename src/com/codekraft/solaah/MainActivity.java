@@ -5,17 +5,12 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import android.app.Activity;
-import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
-import android.widget.TextView;
 
 import com.codekraft.data.SQLDbAdapter;
 
@@ -87,8 +82,6 @@ public class MainActivity extends Activity {
 	private String getPrayerTimesForDate(String date) {
 		Cursor cursor = myDbHelper.getTimingsForDate(date);
 		cursor.moveToFirst();
-		// int colCount = cursor.getColumnCount();
-		String var1 = cursor.getString(3);
 
 		return "";
 	}

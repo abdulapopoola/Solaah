@@ -19,7 +19,7 @@ public class List extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        
+
         list = new ArrayList<HashMap<String,String>>(); 
         lv = (ListView) findViewById(R.id.listView1);
        
@@ -28,7 +28,7 @@ public class List extends Activity {
         		this,
         		list,
         		R.layout.row,
-        		new String[] {"salah","time",},
+        		new String[] {"salah","hour"},
         		new int[] {R.id.salah, R.id.timeView}
         		);
        // populateList();
