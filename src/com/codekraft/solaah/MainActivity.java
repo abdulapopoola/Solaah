@@ -2,7 +2,9 @@ package com.codekraft.solaah;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 
 import android.app.Activity;
 import android.database.Cursor;
@@ -10,8 +12,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.SimpleCursorAdapter;
 
+import com.codekraft.data.Constants;
 import com.codekraft.data.SQLDbAdapter;
 
 public class MainActivity extends Activity {
@@ -33,30 +37,19 @@ public class MainActivity extends Activity {
 		}
 
 		String today = getTodayDate();
-		getPrayerTimesForDate(today);
-
-		// From is the column name in your cursor where you're getting the data
-		// to is the id of the view it will map to
-		from = new String[] { "Fajr", "Sunrise", "Zuhr", "Asr", "Maghrib", "Isha" };
-		to = new int[] { 
-				R.id.fajr_row,
-				R.id.sunrise_row,
-				R.id.zuhr_row,
-				R.id.asr_row,
-				R.id.maghrib_row,
-				R.id.isha_row
-		};
-		
-		Cursor cursor = myDbHelper.getTimingsForDate(today);
-		SimpleCursorAdapter adapter = new SimpleCursorAdapter(
-			    this, 
-			    R.layout.prayer_times_rows, 
-			    cursor, 
-			    from, 
-			    to,
-			    0);
+		ArrayList<HashMap<String, String>> list = getPrayerTimesForDate(today);
+		Log.i(list.toString(), TAG);
 
 		ListView listView = (ListView) findViewById(R.id.listView1);
+		
+		SimpleAdapter adapter = new SimpleAdapter(
+        		this,
+        		list,
+        		R.layout.row,
+        		new String[] {"salaah","time"},
+        		new int[] {R.id.salah, R.id.timeView}
+        		);
+		
 		listView.setAdapter(adapter);
 	}
 
@@ -79,10 +72,50 @@ public class MainActivity extends Activity {
 		return formattedDate;
 	}
 
-	private String getPrayerTimesForDate(String date) {
+	private ArrayList<HashMap<String, String>> getPrayerTimesForDate(String date) {
+		//Refactor by using loop
 		Cursor cursor = myDbHelper.getTimingsForDate(date);
 		cursor.moveToFirst();
-
-		return "";
+		
+		HashMap<String, String> map = new HashMap<String, String>();
+		ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String,String>>(); 
+		String time = "";
+		
+        time = cursor.getString(cursor.getColumnIndex(Constants.FAJR) );
+        map.put("salaah", Constants.FAJR);
+        map.put("time", time);
+        list.add(map);
+        map = new HashMap<String, String>();
+        
+        time = cursor.getString(cursor.getColumnIndex(Constants.SUNRISE) );        
+        map.put("salaah", Constants.SUNRISE);
+        map.put("time", time);
+        list.add(map);
+        map = new HashMap<String, String>();
+        
+        time = cursor.getString(cursor.getColumnIndex(Constants.ZUHR) );
+        map.put("salaah", Constants.ZUHR);
+        map.put("time", time);
+        list.add(map);
+        map = new HashMap<String, String>();
+        
+        time = cursor.getString(cursor.getColumnIndex(Constants.ASR) );
+        map.put("salaah", Constants.ASR);
+        map.put("time", time);
+        list.add(map);
+        map = new HashMap<String, String>();
+        
+        time = cursor.getString(cursor.getColumnIndex(Constants.MAGHRIB) );
+        map.put("salaah", Constants.MAGHRIB);
+        map.put("time", time);
+        list.add(map);
+        map = new HashMap<String, String>();
+        
+        time = cursor.getString(cursor.getColumnIndex(Constants.ISHA) );
+        map.put("salaah", Constants.ISHA);
+        map.put("time", time);
+        list.add(map);
+        
+		return list;
 	}
 }
