@@ -13,9 +13,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
-import android.widget.SimpleCursorAdapter;
 
 import com.codekraft.data.Constants;
+import com.codekraft.data.PrayerTime;
 import com.codekraft.data.SQLDbAdapter;
 
 public class MainActivity extends Activity {
@@ -73,48 +73,19 @@ public class MainActivity extends Activity {
 	}
 
 	private ArrayList<HashMap<String, String>> getPrayerTimesForDate(String date) {
-		//Refactor by using loop
+		ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String,String>>();
+		
 		Cursor cursor = myDbHelper.getTimingsForDate(date);
 		cursor.moveToFirst();
 		
-		HashMap<String, String> map = new HashMap<String, String>();
-		ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String,String>>(); 
-		String time = "";
-		
-        time = cursor.getString(cursor.getColumnIndex(Constants.FAJR) );
-        map.put("salaah", Constants.FAJR);
-        map.put("time", time);
-        list.add(map);
-        map = new HashMap<String, String>();
-        
-        time = cursor.getString(cursor.getColumnIndex(Constants.SUNRISE) );        
-        map.put("salaah", Constants.SUNRISE);
-        map.put("time", time);
-        list.add(map);
-        map = new HashMap<String, String>();
-        
-        time = cursor.getString(cursor.getColumnIndex(Constants.ZUHR) );
-        map.put("salaah", Constants.ZUHR);
-        map.put("time", time);
-        list.add(map);
-        map = new HashMap<String, String>();
-        
-        time = cursor.getString(cursor.getColumnIndex(Constants.ASR) );
-        map.put("salaah", Constants.ASR);
-        map.put("time", time);
-        list.add(map);
-        map = new HashMap<String, String>();
-        
-        time = cursor.getString(cursor.getColumnIndex(Constants.MAGHRIB) );
-        map.put("salaah", Constants.MAGHRIB);
-        map.put("time", time);
-        list.add(map);
-        map = new HashMap<String, String>();
-        
-        time = cursor.getString(cursor.getColumnIndex(Constants.ISHA) );
-        map.put("salaah", Constants.ISHA);
-        map.put("time", time);
-        list.add(map);
+		for(PrayerTime p : PrayerTime.values()){
+			HashMap<String, String> map = new HashMap<String, String>();
+			String entry = p.toString();
+			String time = cursor.getString(cursor.getColumnIndex(entry));
+			map.put("salaah", entry);
+	        map.put("time", time);
+			list.add(map);
+		}
         
 		return list;
 	}
