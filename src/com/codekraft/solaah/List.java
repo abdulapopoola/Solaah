@@ -21,7 +21,7 @@ public class List extends Activity {
         setContentView(R.layout.activity_main);
 
         list = new ArrayList<HashMap<String,String>>(); 
-        lv = (ListView) findViewById(R.id.listView1);
+        lv = (ListView) findViewById(R.id.timesList);
        
 		populateList();
         SimpleAdapter adapter = new SimpleAdapter(

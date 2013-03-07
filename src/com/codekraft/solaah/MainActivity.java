@@ -1,9 +1,11 @@
 package com.codekraft.solaah;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 
 import android.app.Activity;
@@ -13,6 +15,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 
 import com.codekraft.data.Constants;
 import com.codekraft.data.PrayerTime;
@@ -32,15 +35,17 @@ public class MainActivity extends Activity {
 		try {
 			myDbHelper = new SQLDbAdapter(this);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			Log.e("DB FAILED", TAG);
 		}
 
-		String today = getTodayDate();
+		String today = getTodayDate(Constants.DB_DATE_FORMAT);
 		ArrayList<HashMap<String, String>> list = getPrayerTimesForDate(today);
-		Log.i(list.toString(), TAG);
-
-		ListView listView = (ListView) findViewById(R.id.listView1);
+		
+		TextView textView = (TextView) findViewById(R.id.dateTextView);
+		String date = getTodayDate(Constants.DISPLAY_DATE_FORMAT);
+		textView.setText(date);
+				
+		ListView listView = (ListView) findViewById(R.id.timesList);
 		
 		SimpleAdapter adapter = new SimpleAdapter(
         		this,
@@ -61,12 +66,12 @@ public class MainActivity extends Activity {
 	}
 
 	/**
-	 * Gets today's date in this format: 2-Feb
+	 * Gets today's date in specified format
 	 * */
-	private String getTodayDate() {
+	private String getTodayDate(String format) {
 		Calendar c = Calendar.getInstance();
 
-		SimpleDateFormat df = new SimpleDateFormat("d-MMM");
+		SimpleDateFormat df = new SimpleDateFormat(format);
 		String formattedDate = df.format(c.getTime());
 
 		return formattedDate;
@@ -85,6 +90,16 @@ public class MainActivity extends Activity {
 			map.put("salaah", entry);
 	        map.put("time", time);
 			list.add(map);
+			
+			SimpleDateFormat dt = new SimpleDateFormat("hh:mm a");
+			Date dat;
+			try {
+				dat = dt.parse(time);
+				Log.i(dat.toString(), "TIME");
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}			
 		}
         
 		return list;
