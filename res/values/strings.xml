@@ -10,5 +10,13 @@
     <string name="hourCount">2 hours until Zuhr</string>
     <string name="salat">Salah</string>
     <string name="time">12:15</string>
-
+	<string name="change_setting">Change Athan settings</string>
+	<string name="save">Save Settings</string>
+	<string name="fajr">Fajr</string>
+	<string name="sunrise">Sunrise</string>
+	<string name="zuhr">Zuhr</string>
+	<string name="asr">Asr</string>
+	<string name="maghrib">Maghrib</string>
+	<string name="isha">Isha</string>
+	
 </resources>

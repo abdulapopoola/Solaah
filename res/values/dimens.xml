@@ -4,4 +4,5 @@
     <dimen name="twenty">20dp</dimen>
     <dimen name="two">2dp</dimen>
     <dimen name="four">4dp</dimen>
+    <dimen name="fourty">40dp</dimen>
 </resources>
