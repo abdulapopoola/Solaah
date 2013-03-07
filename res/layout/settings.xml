@@ -11,75 +11,176 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal" >
 
-        <Button
-            android:id="@+id/button1"
+        <TextView
+            android:id="@+id/setting_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Button" />
-
+            android:text="@string/change_setting" />
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@string/settings_bottom_container"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical" >
+    <!-- Start of Fajr Setting -->
 
-    </LinearLayout>
+    <RelativeLayout
+        android:id="@+id/fajrSetting"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/fourty"
+        android:orientation="vertical"
+        android:padding="@dimen/four" >
 
-    <TableLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-
-        <TableRow
-            android:id="@+id/tableRow1"
+        <TextView
+            android:id="@+id/fajrView"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:text="@string/fajr"
+            android:textIsSelectable="false" />
 
-            <Button
-                android:id="@+id/button2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Button" />
-
-            <Button
-                android:id="@+id/button3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Button" />
-
-            <Button
-                android:id="@+id/button4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Button" />
-
-        </TableRow>
-
-        <TableRow
-            android:id="@+id/tableRow2"
+        <ToggleButton
+            android:id="@+id/fajrToggle"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true" />
+    </RelativeLayout>
 
-            <Button
-                android:id="@+id/button5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Button" />
+    <!-- End of Fajr Setting -->
+    
+    <!-- Start of Sunrise Setting -->
 
-            <Button
-                android:id="@+id/button6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Button" />
+    <RelativeLayout
+        android:id="@+id/sunriseSetting"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/fourty"
+        android:orientation="vertical"
+        android:padding="@dimen/four" >
 
-            <Button
-                android:id="@+id/button7"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Button" />
+        <TextView
+            android:id="@+id/sunriseView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:text="@string/sunrise"
+            android:textIsSelectable="false" />
 
-        </TableRow>
-    </TableLayout>
+        <ToggleButton
+            android:id="@+id/sunriseToggle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true" />
+    </RelativeLayout>
 
+    <!-- End of Sunrise Setting -->
+    
+    <!-- Start of Zuhr Setting -->
+
+    <RelativeLayout
+        android:id="@+id/zuhrSetting"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/fourty"
+        android:orientation="vertical"
+        android:padding="@dimen/four" >
+
+        <TextView
+            android:id="@+id/zuhrView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:text="@string/zuhr"
+            android:textIsSelectable="false" />
+
+        <ToggleButton
+            android:id="@+id/zuhrToggle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true" />
+    </RelativeLayout>
+
+    <!-- End of Zuhr Setting -->
+	
+	<!-- Start of Asr Setting -->
+
+    <RelativeLayout
+        android:id="@+id/asrSetting"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/fourty"
+        android:orientation="vertical"
+        android:padding="@dimen/four" >
+
+        <TextView
+            android:id="@+id/asrView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:text="@string/asr"
+            android:textIsSelectable="false" />
+
+        <ToggleButton
+            android:id="@+id/asrToggle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true" />
+    </RelativeLayout>
+
+    <!-- End of Asr Setting -->
+    
+    <!-- Start of Maghrib Setting -->
+
+    <RelativeLayout
+        android:id="@+id/maghribSetting"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/fourty"
+        android:orientation="vertical"
+        android:padding="@dimen/four" >
+
+        <TextView
+            android:id="@+id/maghribView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:text="@string/maghrib"
+            android:textIsSelectable="false" />
+
+        <ToggleButton
+            android:id="@+id/maghribToggle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true" />
+    </RelativeLayout>
+
+    <!-- End of Maghrib Setting -->
+    
+    <!-- Start of isha Setting -->
+
+    <RelativeLayout
+        android:id="@+id/ishaSetting"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/fourty"
+        android:orientation="vertical"
+        android:padding="@dimen/four" >
+
+        <TextView
+            android:id="@+id/ishaView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:text="@string/isha"
+            android:textIsSelectable="false" />
+
+        <ToggleButton
+            android:id="@+id/ishaToggle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true" />
+    </RelativeLayout>
+
+    <!-- End of isha Setting -->
+    
+    
+      <Button
+           android:id="@+id/saveButton"
+           android:layout_width="fill_parent"
+           android:layout_height="wrap_content"
+           android:text="@string/save"
+           />
+	      
+	 
 </LinearLayout>
