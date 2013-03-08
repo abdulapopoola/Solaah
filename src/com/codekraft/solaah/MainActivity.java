@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -38,11 +37,11 @@ public class MainActivity extends Activity {
 			Log.e("DB FAILED", TAG);
 		}
 
-		String today = getTodayDate(Constants.DB_DATE_FORMAT);
+		String today = Utilities.getCurrentDateOrTime(Constants.DB_DATE_FORMAT);
 		ArrayList<HashMap<String, String>> list = getPrayerTimesForDate(today);
 		
 		TextView textView = (TextView) findViewById(R.id.dateTextView);
-		String date = getTodayDate(Constants.DISPLAY_DATE_FORMAT);
+		String date = Utilities.getCurrentDateOrTime(Constants.DISPLAY_DATE_FORMAT);
 		textView.setText(date);
 				
 		ListView listView = (ListView) findViewById(R.id.timesList);
@@ -65,23 +64,17 @@ public class MainActivity extends Activity {
 		return true;
 	}
 
-	/**
-	 * Gets today's date in specified format
-	 * */
-	private String getTodayDate(String format) {
-		Calendar c = Calendar.getInstance();
-
-		SimpleDateFormat df = new SimpleDateFormat(format);
-		String formattedDate = df.format(c.getTime());
-
-		return formattedDate;
-	}
-
 	private ArrayList<HashMap<String, String>> getPrayerTimesForDate(String date) {
 		ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String,String>>();
 		
 		Cursor cursor = myDbHelper.getTimingsForDate(date);
 		cursor.moveToFirst();
+		String currentTime = "hh:mm a";
+		String timeNow = Utilities.getCurrentDateOrTime(currentTime);
+		SimpleDateFormat df = new SimpleDateFormat(Constants.DB_TIME_FORMAT);
+		String nextSalaah = "";
+		boolean nextSalaahFound = false;
+		Date now;
 		
 		for(PrayerTime p : PrayerTime.values()){
 			HashMap<String, String> map = new HashMap<String, String>();
@@ -91,16 +84,20 @@ public class MainActivity extends Activity {
 	        map.put("time", time);
 			list.add(map);
 			
-			SimpleDateFormat dt = new SimpleDateFormat("hh:mm a");
-			Date dat;
 			try {
-				dat = dt.parse(time);
-				Log.i(dat.toString(), "TIME");
+				now = df.parse(timeNow);
+				Date salaahTime = df.parse(time);
+				if (salaahTime.compareTo(now) > 0 && !nextSalaahFound){
+					nextSalaah = entry;
+					nextSalaahFound = true;
+				}
 			} catch (ParseException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}			
 		}
+		
+		Log.i(nextSalaah, "NEXT");
         
 		return list;
 	}
