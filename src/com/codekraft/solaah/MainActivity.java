@@ -28,7 +28,6 @@ public class MainActivity extends Activity {
 	protected String[] from;
 	protected int[] to;
 	private ArrayList<HashMap<String, String>> list;
-	private String nextSalaah = "";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +39,7 @@ public class MainActivity extends Activity {
 		} catch (IOException e) {
 			Log.e("DB FAILED", TAG);
 		}
-
+		
 		String today = Utilities.getCurrentDateOrTime(Constants.DB_DATE_FORMAT);
 		list = new ArrayList<HashMap<String, String>>();
 		setupData(today);
@@ -53,6 +52,7 @@ public class MainActivity extends Activity {
 		String date = Utilities
 				.getCurrentDateOrTime(Constants.DISPLAY_DATE_FORMAT);
 		textView.setText(date);
+		String nextSalaah = getNextSalaah();
 
 		textView = (TextView) findViewById(R.id.nextSalaahtextView);
 		textView.setText(nextSalaah);
@@ -63,8 +63,8 @@ public class MainActivity extends Activity {
 						R.id.timeView });
 
 		listView.setAdapter(adapter);
-		MyCount counter = new MyCount(5000,1000);
-        counter.start();
+		MyCount counter = new MyCount(5000, 1000);
+		counter.start();
 	}
 
 	@Override
@@ -78,32 +78,39 @@ public class MainActivity extends Activity {
 		Cursor cursor = myDbHelper.getTimingsForDate(date);
 		cursor.moveToFirst();
 
-		SimpleDateFormat df = new SimpleDateFormat(Constants.DB_TIME_FORMAT,
-				Locale.US);
-		String timeNow = Utilities
-				.getCurrentDateOrTime(Constants.DB_TIME_FORMAT);
-		boolean nextSalaahFound = false;
-		Date now;
-
 		for (PrayerTime p : PrayerTime.values()) {
 			HashMap<String, String> map = new HashMap<String, String>();
 			String entry = p.toString();
 			String time = cursor.getString(cursor.getColumnIndex(entry));
-			map.put("salaah", entry);
-			map.put("time", time);
+			map.put(Constants.SALAAH_KEY, entry);
+			map.put(Constants.TIME_KEY, time);
 			list.add(map);
+		}
+	}
 
+	private String getNextSalaah() {
+		SimpleDateFormat df = new SimpleDateFormat(Constants.DB_TIME_FORMAT, Locale.US);
+		String timeNow = Utilities.getCurrentDateOrTime(Constants.DB_TIME_FORMAT);
+		boolean nextSalaahFound = false;
+		String nextPrayer = "";
+		Date now;
+
+		for (HashMap<String, String> map : list) {
+			String time = map.get(Constants.TIME_KEY);
 			try {
 				now = df.parse(timeNow);
 				Date salaahTime = df.parse(time);
 				if (salaahTime.compareTo(now) > 0 && !nextSalaahFound) {
-					nextSalaah = entry;
+					nextPrayer = map.get(Constants.SALAAH_KEY);
 					nextSalaahFound = true;
+					break;
 				}
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
 		}
+		
+		return nextPrayer;
 	}
 
 	public class MyCount extends CountDownTimer {
@@ -114,16 +121,20 @@ public class MainActivity extends Activity {
 		@Override
 		public void onFinish() {
 			// TODO Auto-generated method stub
-			// Setup counter to next salaah -> maybe I should pull it out into another utility method that returns next for a given time
+			// Setup counter to next salaah -> maybe I should pull it out into
+			// another utility method that returns next for a given time
 			TextView textView = (TextView) findViewById(R.id.nextSalaahtextView);
-			textView.setText("done");
+			String nextSalaah = getNextSalaah();
+			// Update view
+			textView.setText(nextSalaah);
+			onTick(5000);
 		}
 
 		@Override
 		public void onTick(long millisUntilFinished) {
 			// TODO Auto-generated method stub
 			TextView textView = (TextView) findViewById(R.id.nextSalaahtextView);
-			textView.setText(Long.toString(millisUntilFinished/1000));
+			textView.setText(Long.toString(millisUntilFinished / 1000));
 		}
 	}
 }
