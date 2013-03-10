@@ -9,11 +9,13 @@ import java.util.HashMap;
 import java.util.Locale;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
@@ -22,18 +24,20 @@ import com.codekraft.data.Constants;
 import com.codekraft.data.PrayerTime;
 import com.codekraft.data.SQLDbAdapter;
 
+
 public class MainActivity extends Activity {
 	private static final String TAG = "salaahApp";
 	private SQLDbAdapter myDbHelper;
 	protected String[] from;
 	protected int[] to;
 	private ArrayList<HashMap<String, String>> list;
-
+	private static final int SETTINGS_REQUEST = 0;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-
+		
 		try {
 			myDbHelper = new SQLDbAdapter(this);
 		} catch (IOException e) {
@@ -73,7 +77,32 @@ public class MainActivity extends Activity {
 		getMenuInflater().inflate(R.menu.activity_main, menu);
 		return true;
 	}
-
+	
+	 public boolean onOptionsItemSelected(MenuItem item) {
+		 Log.v(TAG,"Item " + item.getItemId() +":  " + R.id.menu_settings);
+		    if (item.equals(R.string.menu_settings)) {
+		    	showSettings();
+		        return true;
+		    }
+		    return false;
+		}
+	
+	 protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		 if(requestCode == SETTINGS_REQUEST && resultCode == RESULT_OK){
+			 Log.v(TAG,"Update Main UI");
+		 }
+			 
+	 }
+	 
+	 /**
+	  * Show Athan Settings
+	  */
+	private void showSettings() {
+		Intent intent = new Intent(this, PrayerSettings.class);
+		startActivityForResult(intent, 0);
+	}
+	
+	
 	private void setupData(String date) {
 		Cursor cursor = myDbHelper.getTimingsForDate(date);
 		cursor.moveToFirst();

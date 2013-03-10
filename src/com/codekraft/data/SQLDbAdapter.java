@@ -24,7 +24,7 @@ public class SQLDbAdapter extends SQLiteOpenHelper {
 	private static final int DATABASE_VERSION = 1;
 	private static final String TAG = "sqldbadapter";
 	private static final String PRAYER_TIMES_TABLE = "prayertimes";
-
+	private static final String SETTINGS_TABLE = "settings";
 	/**
 	 * Constructor Takes and keeps a reference of the passed context in order to
 	 * access to the application assets and resources.
@@ -153,7 +153,8 @@ public class SQLDbAdapter extends SQLiteOpenHelper {
 			Log.e("Error upgrading database", e.toString());
 		}
 	}
-
+	
+	
 	/**
 	 * Gets the times for a particular date
 	 * 
