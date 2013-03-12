@@ -12,7 +12,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -59,7 +58,7 @@ public class MainActivity extends Activity {
 		String nextSalaah = getNextSalaah();
 
 		textView = (TextView) findViewById(R.id.nextSalaahtextView);
-		textView.setText(nextSalaah);
+		textView.setText("Next Salaah: " + nextSalaah);
 
 		ListView listView = (ListView) findViewById(R.id.timesList);
 		SimpleAdapter adapter = new SimpleAdapter(this, list, R.layout.row,
@@ -67,8 +66,6 @@ public class MainActivity extends Activity {
 						R.id.timeView });
 
 		listView.setAdapter(adapter);
-		MyCount counter = new MyCount(5000, 1000);
-		counter.start();
 	}
 
 	@Override
@@ -140,30 +137,5 @@ public class MainActivity extends Activity {
 		}
 		
 		return nextPrayer;
-	}
-
-	public class MyCount extends CountDownTimer {
-		public MyCount(long millisInFuture, long countDownInterval) {
-			super(millisInFuture, countDownInterval);
-		}
-
-		@Override
-		public void onFinish() {
-			// TODO Auto-generated method stub
-			// Setup counter to next salaah -> maybe I should pull it out into
-			// another utility method that returns next for a given time
-			TextView textView = (TextView) findViewById(R.id.nextSalaahtextView);
-			String nextSalaah = getNextSalaah();
-			// Update view
-			textView.setText(nextSalaah);
-			onTick(5000);
-		}
-
-		@Override
-		public void onTick(long millisUntilFinished) {
-			// TODO Auto-generated method stub
-			TextView textView = (TextView) findViewById(R.id.nextSalaahtextView);
-			textView.setText(Long.toString(millisUntilFinished / 1000));
-		}
 	}
 }
