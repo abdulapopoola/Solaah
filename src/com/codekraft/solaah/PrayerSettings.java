@@ -1,14 +1,17 @@
 package com.codekraft.solaah;
 
-import com.codekraft.data.Settings;
-
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ToggleButton;
+
+import com.codekraft.data.Constants;
+import com.codekraft.data.PrayerTime;
+
 
 public class PrayerSettings extends Activity{
 	private String TAG = "Prayer Settings";
@@ -39,31 +42,51 @@ public class PrayerSettings extends Activity{
         ishaButton.setOnCheckedChangeListener(listener);
 	}
 	
+	private void SavePreferences(String key, Boolean value){
+	    SharedPreferences sharedPreferences = getSharedPreferences("SETTINGS_PREF", MODE_PRIVATE);
+	    SharedPreferences.Editor editor = sharedPreferences.edit();
+	    editor.putBoolean(key, value);
+	    editor.commit();
+	   }
+	  
+	   private void LoadPreferences(){
+	    SharedPreferences sharedPreferences = getSharedPreferences("SETTINGS_PREF", MODE_PRIVATE);
+	   Boolean fajr = sharedPreferences.getBoolean(PrayerTime.FAJR.toString(), true);
+	   Boolean sunrise = sharedPreferences.getBoolean(PrayerTime.SUNRISE.toString(), true);
+	   Boolean zuhr = sharedPreferences.getBoolean(PrayerTime.ZUHR.toString(), true);
+	   Boolean asr = sharedPreferences.getBoolean(PrayerTime.ASR.toString(), true);
+	   Boolean maghrib = sharedPreferences.getBoolean(PrayerTime.MAGHRIB.toString(), true);
+	   Boolean isha = sharedPreferences.getBoolean(PrayerTime.ISHA.toString(), true);
+	   
+	   fajrButton.setChecked(fajr);
+	   sunriseButton.setChecked(sunrise);
+	   zuhrButton.setChecked(zuhr);
+	   asrButton.setChecked(asr);
+	   maghribButton.setChecked(maghrib);
+	   fajrButton.setChecked(fajr);
+	   Log.v(TAG,"Settings: " + fajr + "/" + sunrise + "/ " + zuhr + "/" + asr + "/" + maghrib  + "/ " +  isha);
+	    
+	   }
+	
 	/**
 	 * Responds to Changes of state in toggle buttons
 	 */
 	OnCheckedChangeListener listener = new OnCheckedChangeListener() {
         public void onCheckedChanged(CompoundButton toggleButton, boolean isChecked) {
             if(toggleButton == fajrButton){
-            	new Settings().setFajr(isChecked);
-            	Log.v(TAG, "Fajr is " + Settings.Fajr);
+            	SavePreferences(PrayerTime.FAJR.toString(), isChecked);
             }else if(toggleButton == sunriseButton){
-            	new Settings().setSunrise(isChecked);
-            	Log.v(TAG, "Sunrise is " + Settings.Sunrise);
+            	SavePreferences(PrayerTime.SUNRISE.toString(), isChecked);
             }else if(toggleButton == zuhrButton){
-            	new Settings().setZuhr(isChecked);
-            	Log.v(TAG, "Zuhr is " + Settings.Zuhr);
+            	SavePreferences(PrayerTime.ZUHR.toString(), isChecked);
             }else if(toggleButton == asrButton){
-            	new Settings().setAsr(isChecked);
-            	Log.v(TAG, "Asr is " + Settings.Asr);
+            	SavePreferences(PrayerTime.ASR.toString(), isChecked);
             }else if(toggleButton == maghribButton){
-            	new Settings().setMaghrib(isChecked);
-            	Log.v(TAG, "Maghrib is " + Settings.Maghrib);
+            	SavePreferences(PrayerTime.MAGHRIB.toString(), isChecked);
             }else if(toggleButton == ishaButton){
-            	new Settings().setIsha(isChecked);
-            	Log.v(TAG, "Isha is " + Settings.Isha);
+            	SavePreferences(PrayerTime.ISHA.toString(), isChecked);
             }
-            
+            LoadPreferences();
         }
 	};
 	
