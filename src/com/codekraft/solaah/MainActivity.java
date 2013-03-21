@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
@@ -30,8 +31,10 @@ public class MainActivity extends Activity {
 	protected String[] from;
 	protected int[] to;
 	private ArrayList<HashMap<String, String>> list;
+	private ArrayList<String> timeList;
+	private ArrayAdapter<String> adapter;
 	private static final int SETTINGS_REQUEST = 0;
-	
+//	private String[] timeList;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -42,9 +45,9 @@ public class MainActivity extends Activity {
 		} catch (IOException e) {
 			Log.e("DB FAILED", TAG);
 		}
-		
 		String today = Utilities.getCurrentDateOrTime(Constants.DB_DATE_FORMAT);
 		list = new ArrayList<HashMap<String, String>>();
+		timeList = new ArrayList<String>();
 		setupData(today);
 
 		setupDisplay();
@@ -61,10 +64,8 @@ public class MainActivity extends Activity {
 		textView.setText("Next Salaah: " + nextSalaah);
 
 		ListView listView = (ListView) findViewById(R.id.timesList);
-		SimpleAdapter adapter = new SimpleAdapter(this, list, R.layout.row,
-				new String[] { "salaah", "time" }, new int[] { R.id.salah,
-						R.id.timeView });
-
+		adapter = new PrayerAdapter(this, timeList);
+		
 		listView.setAdapter(adapter);
 	}
 
@@ -77,7 +78,8 @@ public class MainActivity extends Activity {
 	
 	 public boolean onOptionsItemSelected(MenuItem item) {
 		 Log.v(TAG,"Item " + item.getItemId() +":  " + R.id.menu_settings);
-		    if (item.equals(R.string.menu_settings)) {
+		    if (item.getItemId() == R.id.menu_settings) {
+		    	 Log.v(TAG,"Works");
 		    	showSettings();
 		        return true;
 		    }
@@ -87,6 +89,7 @@ public class MainActivity extends Activity {
 	 protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		 if(requestCode == SETTINGS_REQUEST && resultCode == RESULT_OK){
 			 Log.v(TAG,"Update Main UI");
+			 adapter.notifyDataSetChanged();
 		 }
 			 
 	 }
@@ -103,11 +106,12 @@ public class MainActivity extends Activity {
 	private void setupData(String date) {
 		Cursor cursor = myDbHelper.getTimingsForDate(date);
 		cursor.moveToFirst();
-
+		
 		for (PrayerTime p : PrayerTime.values()) {
 			HashMap<String, String> map = new HashMap<String, String>();
 			String entry = p.toString();
 			String time = cursor.getString(cursor.getColumnIndex(entry));
+			timeList.add(time);
 			map.put(Constants.SALAAH_KEY, entry);
 			map.put(Constants.TIME_KEY, time);
 			list.add(map);

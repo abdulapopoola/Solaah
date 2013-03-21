@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ToggleButton;
@@ -40,6 +41,8 @@ public class PrayerSettings extends Activity{
         asrButton.setOnCheckedChangeListener(listener);
         maghribButton.setOnCheckedChangeListener(listener);
         ishaButton.setOnCheckedChangeListener(listener);
+        
+        LoadPreferences();
 	}
 	
 	private void SavePreferences(String key, Boolean value){
@@ -93,7 +96,7 @@ public class PrayerSettings extends Activity{
 	/**
 	 * Returns to Main Activity and updates Interface with new settings values
 	 */
-	public void updateSettings(){
+	public void updateSettings(View v){
 		
 		Intent returnIntent = new Intent();
 		 setResult(RESULT_OK,returnIntent);        
