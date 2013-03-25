@@ -4,26 +4,30 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.text.format.Time;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.codekraft.data.Constants;
 import com.codekraft.data.PrayerTime;
 import com.codekraft.data.SQLDbAdapter;
-
 
 public class MainActivity extends Activity {
 	private static final String TAG = "salaahApp";
@@ -34,6 +38,7 @@ public class MainActivity extends Activity {
 	private ArrayList<String> timeList;
 	private ArrayAdapter<String> adapter;
 	private static final int SETTINGS_REQUEST = 0;
+	private static int LAST_ID = 123;
 //	private String[] timeList;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -111,11 +116,18 @@ public class MainActivity extends Activity {
 			HashMap<String, String> map = new HashMap<String, String>();
 			String entry = p.toString();
 			String time = cursor.getString(cursor.getColumnIndex(entry));
-			timeList.add(time);
 			map.put(Constants.SALAAH_KEY, entry);
 			map.put(Constants.TIME_KEY, time);
 			list.add(map);
+			/*Populate ArrayList for Adapter*/
+			timeList.add(time);
+			/*Set Alarm for all times except Sunrise*/
+			if(!entry.equals(PrayerTime.SUNRISE.toString())){
+				setAlarm(entry,time);
+			}
+			
 		}
+		
 	}
 
 	private String getNextSalaah() {
@@ -130,6 +142,7 @@ public class MainActivity extends Activity {
 			try {
 				now = df.parse(timeNow);
 				Date salaahTime = df.parse(time);
+				Log.v(TAG,salaahTime.toGMTString());
 				if (salaahTime.compareTo(now) > 0 && !nextSalaahFound) {
 					nextPrayer = map.get(Constants.SALAAH_KEY);
 					nextSalaahFound = true;
@@ -142,4 +155,43 @@ public class MainActivity extends Activity {
 		
 		return nextPrayer;
 	}
+	
+	/**
+	  * Increases the ID for the Alarm PendingIntent
+	  */
+	private void updateIntentID(){
+		
+		LAST_ID += 1;
+		Log.v(TAG,"NExt ID is " + LAST_ID);
+		
+	}
+	private void setAlarm( String prayerTime, String timeString){
+		
+		/* Parse String to Time */
+		String[] timing;
+		timing = timeString.split(" ");
+		String[] hourMinute = timing[0].split(":");
+		Time time = new Time();
+		time.hour = Integer.parseInt(hourMinute[0]);
+		time.minute = Integer.parseInt(hourMinute[1]);
+		
+		int AmPm = (timing[1].equals("AM"))? 0:1;
+		Log.v(TAG, "Time is " + hourMinute[0] + ": " + hourMinute[1] + " " + AmPm);
+		Calendar calendar = Calendar.getInstance();
+		Log.v(TAG,"Now Time:" + calendar.getTime());
+		calendar.set(Calendar.HOUR, time.hour);
+		calendar.set(Calendar.MINUTE, time.minute);
+		calendar.set(Calendar.AM_PM, AmPm);
+		Log.v(TAG,"Updated Time: " +  calendar.getTime());
+		
+		Intent intent = new Intent(getApplicationContext(), SalaahBackgroundService.class);
+	    intent.putExtra("PrayerTime", prayerTime);
+		PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), LAST_ID, intent, 0);
+	    updateIntentID();
+	    
+	    AlarmManager am=(AlarmManager)getSystemService(Context.ALARM_SERVICE);
+	    am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+	    Toast.makeText(MainActivity.this, "Start Alarm!", Toast.LENGTH_LONG).show();
+	}
+
 }
