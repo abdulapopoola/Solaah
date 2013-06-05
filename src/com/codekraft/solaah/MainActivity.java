@@ -121,13 +121,9 @@ public class MainActivity extends Activity {
 			list.add(map);
 			/*Populate ArrayList for Adapter*/
 			timeList.add(time);
-			/*Set Alarm for all times except Sunrise*/
-			if(!entry.equals(PrayerTime.SUNRISE.toString())){
-				setAlarm(entry,time);
-			}
-			
+
 		}
-		
+
 	}
 
 	private String getNextSalaah() {
@@ -142,10 +138,12 @@ public class MainActivity extends Activity {
 			try {
 				now = df.parse(timeNow);
 				Date salaahTime = df.parse(time);
-				Log.v(TAG,salaahTime.toGMTString());
 				if (salaahTime.compareTo(now) > 0 && !nextSalaahFound) {
 					nextPrayer = map.get(Constants.SALAAH_KEY);
 					nextSalaahFound = true;
+                    /*Set Alarm for all times except Sunrise*/
+                     setAlarm(nextPrayer,time);
+
 					break;
 				}
 			} catch (ParseException e) {
